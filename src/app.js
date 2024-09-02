@@ -4,6 +4,7 @@ import router from "./routers/index.js";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./swaggerOptions.js";
 import { ENV_KEY } from "./constants/env.constant.js";
+import { globalErrorHandler } from "./middlewarmies/error-handler.middleware.js";
 import "dotenv/config";
 
 const app = express();
@@ -12,7 +13,7 @@ app.use(express.json());
 app.use(morgan("combined"));
 
 app.use(router);
-
+app.use(globalErrorHandler);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/api", async (req, res) => {

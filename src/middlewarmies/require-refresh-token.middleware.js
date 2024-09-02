@@ -22,7 +22,6 @@ const refreshTokenMiddleware = async (req, res, next) => {
       throw new HttpError.Unauthorized(MESSAGES.AUTH.COMMON.JWT.NOT_SUPPORTED_TYPE);
     }
 
-    // 리프래시 토큰 검증
     const payload = await validateToken(token, ENV_KEY.REFRESH_SECRET_KEY);
     if (payload === 'expired') {
       throw new HttpError.Unauthorized(MESSAGES.AUTH.COMMON.JWT.EXPIRED);

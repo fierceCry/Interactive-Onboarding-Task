@@ -1,11 +1,9 @@
-import jwt from 'jsonwebtoken';
-import { prisma } from '../utils/prisma.util.js';
-import { ENV_KEY } from '../constants/env.constant.js';
-import { MESSAGES } from '../constants/message.constant.js';
-import {
-  HttpError
-} from '../errors/http.error.js';
-import { UserRepository } from '../repositories/users.repository.js';
+import jwt from "jsonwebtoken";
+import { prisma } from "../utils/prisma.util.js";
+import { ENV_KEY } from "../constants/env.constant.js";
+import { MESSAGES } from "../constants/message.constant.js";
+import { HttpError } from "../errors/http.error.js";
+import { UserRepository } from "../repositories/users.repository.js";
 
 const userRepository = new UserRepository(prisma);
 
@@ -14,10 +12,10 @@ const validateToken = async (token, secretKey) => {
     const payload = jwt.verify(token, secretKey);
     return payload;
   } catch (err) {
-    if (err.name === 'TokenExpiredError') {
-      return 'expired';
+    if (err.name === "TokenExpiredError") {
+      return "expired";
     } else {
-      return 'JsonWebTokenError';
+      return "JsonWebTokenError";
     }
   }
 };
@@ -30,15 +28,17 @@ const authMiddleware = async (req, res, next) => {
       throw new HttpError.BadRequest(MESSAGES.AUTH.COMMON.JWT.NO_TOKEN);
     }
 
-    const token = authorizationHeader.split('Bearer ')[1];
+    const token = authorizationHeader.split("Bearer ")[1];
     if (!token) {
-      throw new HttpError.Unauthorized(MESSAGES.AUTH.COMMON.JWT.NOT_SUPPORTED_TYPE);
+      throw new HttpError.Unauthorized(
+        MESSAGES.AUTH.COMMON.JWT.NOT_SUPPORTED_TYPE
+      );
     }
 
     const payload = await validateToken(token, ENV_KEY.SECRET_KEY);
-    if (payload === 'expired') {
+    if (payload === "expired") {
       throw new HttpError.Unauthorized(MESSAGES.AUTH.COMMON.JWT.EXPIRED);
-    } else if (payload === 'JsonWebTokenError') {
+    } else if (payload === "JsonWebTokenError") {
       throw new HttpError.Unauthorized(MESSAGES.AUTH.COMMON.JWT.INVALID);
     }
     const user = await userRepository.findById(payload.id);
