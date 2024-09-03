@@ -11,9 +11,9 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan("combined"));
-
 app.use(router);
 app.use(globalErrorHandler);
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/api", async (req, res) => {

@@ -9,11 +9,11 @@ export class AuthRepository {
     });
   };
 
-  userCreate = async ({ username, hashedPassword, nickname }) => {
+  userCreate = async ({ username, password, nickname }) => {
     return this.prisma.user.create({
       data: {
         username,
-        password: hashedPassword,
+        password,
         nickname
       },
     });

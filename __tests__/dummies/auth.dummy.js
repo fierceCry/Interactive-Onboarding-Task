@@ -1,5 +1,3 @@
-// __mocks__/dummyData.js
-
 export const signUpData = {
   username: 'aa4518@naver.com',
   password: '12345678',
@@ -20,9 +18,14 @@ export const signUpResponse = {
 }
 
 export const signInData = {
-  username: 'aa4518@naver.com',
-  password: '12345678',
-};
+  "username": "aa45111@naver.com",
+  "nickname": "김만규",
+  "authorities": [
+      {
+          "authorityName": "ROLE_USER"
+      }
+  ]
+}
 
 export const signInResponse = {
   accessToken: 'accessToken',

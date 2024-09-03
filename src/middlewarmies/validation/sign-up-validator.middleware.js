@@ -1,9 +1,8 @@
 import Joi from 'joi';
 
 const schema = Joi.object({
-  username: Joi.string().email().required().messages({
-    'any.required': '이메일을 입력해주세요.',
-    'string.email': '유효한 이메일 형식이 아닙니다.',
+  username: Joi.string().required().messages({
+    'any.required': '이름을 입력하세요.',
   }),
   password: Joi.string()
     .required()
