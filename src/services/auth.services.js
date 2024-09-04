@@ -4,6 +4,7 @@ import { HttpError } from '../errors/http.error.js';
 import { HASH_SALT_ROUNDS } from '../constants/auth.constant.js';
 import { ACCESS_TOKEN_EXPIRES_IN } from '../constants/auth.constant.js';
 import { ENV_KEY } from '../constants/env.constant.js';
+import { REFRESH_TOKEN_EXPIRES_IN } from '../constants/auth.constant.js'
 
 export class AuthService {
   constructor(authRepository) {
@@ -43,11 +44,18 @@ export class AuthService {
       throw new HttpError.Unauthorized('비밀번호가 올바르지 않습니다.');
     }
 
-    const token = jwt.sign(
-      { id: user.id, username: user.username },
+    const accessToken = jwt.sign(
+      { id: user.id },
       ENV_KEY.SECRET_KEY,
       { expiresIn: ACCESS_TOKEN_EXPIRES_IN }
     );
-    return { token };
+
+    const refreshToken = jwt.sign(
+      { id: user.id },
+      ENV_KEY.REFRESH_SECRET_KEY,
+      { expiresIn: REFRESH_TOKEN_EXPIRES_IN}
+    )
+    await this.authRepository.token({userId: user.id, refreshToken})
+    return { accessToken, refreshToken };
   };
 }
